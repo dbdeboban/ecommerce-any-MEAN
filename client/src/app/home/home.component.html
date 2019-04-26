@@ -1,0 +1,44 @@
+<div id="home">
+  <div class="container-fluid d-none d-md-block" style="padding:0px !important">
+    <ngb-carousel>
+      <ng-template ngbSlide>
+        <img src="assets/img/image1.jpg" alt="Image 1" class="item">
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image2.jpg" alt="Image 2" class="item">
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image3.jpg" alt="Image 3" class="item">
+      </ng-template>
+    </ngb-carousel>
+  </div>
+</div>
+
+<div class="container mt-5" style="font-family:Pridi;">
+  <p class="lead text-center">Recommended Deals:</p>
+
+  <div>
+    <div *ngIf="!products" class="m-auto">
+      <div style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;width: 200px;height: 100px;margin: auto;'>
+        <sk-wave></sk-wave>
+      </div>
+    </div>
+
+    <div *ngIf="products" class="row">
+      <div *ngFor="let product of products"  class=" col-xl-3 col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
+        <div class="card bg-light">
+          <a routerLink="/product/{{product._id}}">
+            <img
+              [src]="product.image ? product.image : 'img/product/default.png'"
+              alt="{{product.name}}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}} <small class="text-muted">{{product.category.name}}</small></h5>
+              <p class="card-text">{{product.price | currency}}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

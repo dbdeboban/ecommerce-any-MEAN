@@ -1,0 +1,43 @@
+<section id="categories">
+  <div class="container p-5" style="font-family:Pridi">
+    <h4 class= "display-4">Categories</h4>
+
+    <!--show when user data isn't loaded-->
+    <div *ngIf="!categories" class="m-auto">
+      <div style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;width: 200px;height: 100px;margin: auto;'>
+        <sk-wave></sk-wave>
+      </div>
+    </div>
+
+    <!--show after user data loaded-->
+    <div *ngIf="categories" class="list-group">
+      <a *ngFor="let category of categories"
+         routerLink="/categories/{{category._id}}"
+         class="list-group-item list-group-item-action">
+
+        {{category.name}}
+      </a>
+    </div>
+    <hr>
+    <div *ngIf="data.user.isSeller" class="card bg-light mt-5">
+      <div class="card-body">
+        <h4 class="card-title">Add New Category</h4>
+        <hr>
+        <form #myForm="ngForm" (ngSubmit)="addCategory()" class="p-3">
+          <div class="form-group row">
+            <label for="newCategory" class="col-sm-2 form-control-label">Category</label>
+            <input type="text" id="newCategory" name="newCategory" class="col-sm-10 form-control"
+                   [(ngModel)]="newCategory"
+                   required
+                   minlength="2"
+            >
+          </div>
+
+          <hr>
+          <input class="btn btn-primary btn-block" type="submit" [disabled]="!myForm.form.valid" value="Add Category" style="background-color: #6dd5e8">
+        </form>
+      </div>
+    </div>
+  </div>
+
+</section>

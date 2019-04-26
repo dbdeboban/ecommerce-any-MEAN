@@ -1,0 +1,68 @@
+<section id="profile">
+  <div class="container p-5" style="font-family:Pridi">
+    <h4 class="display-4">My Account Settings</h4>
+    <hr>
+
+    <!--show when user data isn't loaded-->
+    <div *ngIf="!currentSettings" class="m-auto">
+      <!--<h1 class="text-center display-3 mt-5">-->
+      <!--<i class="fa fa-spinner fa-spin"></i>-->
+      <!--</h1>-->
+      <div style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;width: 200px;height: 100px;margin: auto;'>
+        <sk-wave></sk-wave>
+      </div>
+    </div>
+
+    <!--show after user data loaded-->
+    <div *ngIf="currentSettings" class=" mt-5">
+      <div class="row card bg-light">
+        <div class="card-body">
+
+          <form #myForm="ngForm" (ngSubmit)="update()" class="p-3">
+            <!--Name input-->
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 form-control-label">Name</label>
+              <input type="text" id="name" name="name" class="col-sm-8 form-control"
+                     [(ngModel)]="currentSettings.name"
+                     minlength="4"
+                     #nameInput="ngModel"
+              >
+              <div *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)" class=" col-sm-10 offset-sm-2 alert alert-danger">
+
+                <div *ngIf="nameInput.errors.minlength">
+                  Name must be at least 4 character long
+                </div>
+              </div>
+            </div>
+
+            <!--Password input-->
+            <div class="form-group row">
+              <label for="password" class="col-sm-4 form-control-label">New Password</label>
+              <input type="password" id="password" name="password" class="col-sm-8 form-control"
+                     [(ngModel)]="currentSettings.newPwd"
+                     minlength="6"
+                     #passwordInput="ngModel"
+              >
+              <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class=" col-sm-8 offset-sm-4 alert alert-danger">
+
+                <div *ngIf="passwordInput.errors.minlength">
+                  Password must be at least 6 character long
+                </div>
+              </div>
+            </div>
+            <!--Confirm Repassword input-->
+            <div class="form-group row">
+              <label for="rePassword" class="col-sm-4 form-control-label">Confirm New Password</label>
+              <input type="password" id="rePassword" name="rePassword" class="col-sm-8 form-control"
+                     [(ngModel)]="currentSettings.pwdConfirm"
+                     #rePasswordInput="ngModel"
+              >
+            <hr>
+            </div>
+            <input class="btn btn-primary btn-block" type="submit" [disabled]="!myForm.form.valid" value="Update Profile" style="background-color: #6dd5e8">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

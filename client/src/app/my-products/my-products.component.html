@@ -1,0 +1,66 @@
+<section id="products">
+  <div class="container p-5">
+    <!--show when user data isn't loaded-->
+    <div *ngIf="!products || this.isLoading" class="m-auto">
+      <div style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;width: 200px;height: 100px;margin: auto;'>
+        <sk-wave></sk-wave>
+      </div>
+    </div>
+
+    <!--show after user data loaded-->
+    <!--user dont have any product-->
+    <h3 *ngIf="products && !products.length" class="display-2 text-center mt-5">You didn't added any product!</h3>
+
+    <!--user have products-->
+    <div *ngIf="products && products.length && !this.loading">
+      <div>
+        <div class="row">
+          <h4 class="display-4 col-md-9">My Products </h4>
+          <p class="col-md-3"><a class="btn btn-info float-right" routerLink="/profile/addproduct">Add product</a></p>
+        </div>
+        <div >
+          <table class="table table-hover table-light table-striped">
+            <thead>
+              <tr class="row" >
+                <th class="col-md-1">#</th>
+                <th class="col-md-4">Image</th>
+                <th class="col-md-3">Name</th>
+                <th class="col-md-2">Category</th>
+                <th class="col-md-2">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  class="row" *ngFor="let product of products; let i = index;" >
+                <td class="col-md-1">
+                  {{i + 1}}
+                </td>
+                <td class="col-md-4 text-center">
+                  <a routerLink="/product/{{product.id}}">
+                    <span *ngIf="product.image">
+                      <img [src]="product.image" alt="Product Image" class="thumbnail">
+                    </span>
+                    <span *ngIf="!product.image">
+                      N/A
+                    </span>
+                  </a>
+                </td>
+                <td class="col-md-3">
+                  <a routerLink="/product/{{product.id}}">
+                    {{product.name}}
+                  </a>
+                </td>
+                <td class="col-md-2">
+                  <p class="m-0">{{product.category.name}}</p>
+                </td>
+                <td class="col-md-2">
+                  {{product.price | currency}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

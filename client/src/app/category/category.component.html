@@ -1,0 +1,56 @@
+<section id="category">
+  <div class="container p-3 p-md-5">
+    <!--show when user data isn't loaded-->
+    <div *ngIf="!category" class="m-auto">
+      <div style='position: fixed;top: 0;bottom: 0;left: 0;right: 0;width: 200px;height: 100px;margin: auto;'>
+        <sk-wave></sk-wave>
+      </div>
+    </div>
+
+    <!--show after user data loaded-->
+    <!--category don't has any products-->
+    <h4 *ngIf="category && !category.products.length" class="display-4 text-center mt-5">
+      No product found in this category
+    </h4>
+
+    <!--category has products-->
+    <div *ngIf="category && category.products.length">
+      <p>{{lower}}-{{upper}} of {{category.totalProducts}} products in {{category.categoryName}}</p>
+      <hr>
+      <div class="product" *ngFor="let product of category.products">
+        <div class="row">
+
+          <div class="col-md-4 text-center">
+            <a routerLink="/product/{{product._id}}">
+              <span *ngIf="product.image">
+                <img [src]="product.image" alt="Product Image" class="thumbnail">
+              </span>
+              <span *ngIf="!product.image">
+                N/A
+              </span>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a routerLink="/product/{{product._id}}">
+              {{product.name}}
+            </a>
+          </div>
+          <div class="col-md-2">
+            {{product.owner.name}}
+          </div>
+          <div class="col-md-3">
+            {{product.price | currency}}
+          </div>
+        </div>
+
+      </div>
+      <hr>
+      <ngb-pagination
+        [collectionSize]="category.totalProducts"
+        [pageSize]="10"
+        [(page)]="page"
+        (pageChange)="getProducts($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</section>
