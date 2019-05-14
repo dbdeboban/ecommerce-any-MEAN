@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable()
 export class RestApiService {
-  baseUrl = 'https://polar-waters-79687.herokuapp.com/';
+  baseUrl = 'http://localhost:3000/';
   constructor(private http: HttpClient) { }
 
   getHeaders(){

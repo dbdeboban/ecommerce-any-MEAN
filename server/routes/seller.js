@@ -51,14 +51,28 @@ router.route('/products')
             message: 'Successfully Added the product.'
         });
     });
-
+// router.post('/faker/changeimg',(req,res,next) =>{
+//     Product.find({}).populate('owner')
+//         .populate('category').exec((err,products)=>{
+//             if(products){
+//                 for(var i=0;i<products.length;i++){
+//                     products[i].image='https://picsum.photos/300/200';
+//                     products[i].save();
+//                 }
+//                 res.json({
+//                     success: true,
+//                     product: products
+//                 });
+//             }
+//         })
+// });
 // for testing
 router.get('/faker/test', (req, res, next) => {
     for (i = 0; i<50; i++){
         let product = new Product();
         product.owner = '5cc073931f78161bcc8d6825';
         product.category = "5cbf6bddd82ba81ad02811c9";
-        product.image = faker.image.fashion();
+        product.image = 'https://fakeimg.pl/250x100/ff0000/';
         product.name = faker.commerce.productName();
         product.description = faker.lorem.words();
         product.price = faker.commerce.price();

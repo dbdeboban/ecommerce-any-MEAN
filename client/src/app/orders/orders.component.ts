@@ -12,7 +12,7 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
-
+  orders:any =[];
   constructor(
     private data: DataService,
     private rest: RestApiService,
@@ -20,7 +20,10 @@ export class OrdersComponent implements OnInit {
     private toastr: ToastrService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const data = await this.rest.get("api/accounts/orders");
+    this.orders = data['orders'];
+    console.log(data);
   }
 
 }

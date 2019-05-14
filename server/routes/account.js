@@ -8,38 +8,38 @@ const config = require('../config');
 const checkJwt = require('../middlewares/check-jwt');
 
 router.post('/signup', (req, res, next) => {
-   let user = new User();
-   user.name = req.body.name;
-   user.email = req.body.email;
-   user.password = req.body.password;
-   user.picture = user.gravatar();
-   user.isSeller = req.body.isSeller;
+    let user = new User();
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    user.picture = user.gravatar();
+    user.isSeller = req.body.isSeller;
 
-   User.findOne({email: user.email}, (err, existingUser) => {
-       if (existingUser){
-           res.json({
-               success: false,
-               Message: 'Email already used by another account.'
-           });
-       }
-       else {
-           user.save();
-           const token = jwt.sign({
-               user: user
-           }, config.secret, {
-               expiresIn: '7d'
-           });
-           res.json({
-               success: true,
-               message: 'Successfully registered.',
-               token: token
-           });
-       }
-   });
+    User.findOne({ email: user.email }, (err, existingUser) => {
+        if (existingUser) {
+            res.json({
+                success: false,
+                Message: 'Email already used by another account.'
+            });
+        }
+        else {
+            user.save();
+            const token = jwt.sign({
+                user: user
+            }, config.secret, {
+                    expiresIn: '7d'
+                });
+            res.json({
+                success: true,
+                message: 'Successfully registered.',
+                token: token
+            });
+        }
+    });
 });
 
 router.post('/login', (req, res, next) => {
-    User.findOne({email:req.body.email}, (err, user) => {
+    User.findOne({ email: req.body.email }, (err, user) => {
         if (err) {
             return res.json({
                 success: false,
@@ -47,7 +47,7 @@ router.post('/login', (req, res, next) => {
             });
         }
 
-        if (!user){
+        if (!user) {
             return res.json({
                 success: false,
                 message: "Authentication failed, User doesn't exist."
@@ -55,7 +55,7 @@ router.post('/login', (req, res, next) => {
         }
 
         let validPassword = user.comparePassword(req.body.password);
-        if (!validPassword){
+        if (!validPassword) {
             return res.json({
                 success: false,
                 message: "Authentication failed, Wrong password."
@@ -65,8 +65,8 @@ router.post('/login', (req, res, next) => {
         const token = jwt.sign({
             user: user
         }, config.secret, {
-            expiresIn: '7d'
-        });
+                expiresIn: '7d'
+            });
 
         return res.json({
             success: true,
@@ -78,9 +78,8 @@ router.post('/login', (req, res, next) => {
 
 router.route("/profile")
     .get(checkJwt, (req, res, next) => {
-        User.findOne({_id: req.decoded.user._id}, (err, user) => {
-            if (err)
-            {
+        User.findOne({ _id: req.decoded.user._id }, (err, user) => {
+            if (err) {
                 return res.json({
                     success: false,
                     message: "Unknown error"
@@ -95,13 +94,13 @@ router.route("/profile")
         })
     })
     .post(checkJwt, (req, res, next) => {
-        User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        User.findOne({ _id: req.decoded.user._id }, (err, user) => {
             if (err)
                 return next(err.message);
 
-            if(req.body.name) user.name = req.body.name;
+            if (req.body.name) user.name = req.body.name;
             // if(req.body.email) user.email = req.body.email;
-            if(req.body.newPassword) user.password = req.body.newPassword;
+            if (req.body.newPassword) user.password = req.body.newPassword;
             // user.isSeller = res.body.isSeller;
             user.save();
 
@@ -114,9 +113,8 @@ router.route("/profile")
 
 router.route("/address")
     .get(checkJwt, (req, res, next) => {
-        User.findOne({_id: req.decoded.user._id}, (err, user) => {
-            if (err)
-            {
+        User.findOne({ _id: req.decoded.user._id }, (err, user) => {
+            if (err) {
                 return res.json({
                     success: false,
                     message: "Unknown error"
@@ -130,15 +128,15 @@ router.route("/address")
         })
     })
     .post(checkJwt, (req, res, next) => {
-        User.findOne({_id: req.decoded.user._id}, (err, user) => {
+        User.findOne({ _id: req.decoded.user._id }, (err, user) => {
             if (err)
                 return next(err);
-            if(req.body.addressLine1) user.address.addressLine1 = req.body.addressLine1;
-            if(req.body.addressLine2) user.address.addressLine2 = req.body.addressLine2;
-            if(req.body.city) user.address.city = req.body.city;
-            if(req.body.state) user.address.state = req.body.state;
-            if(req.body.country) user.address.country = req.body.country;
-            if(req.body.postCode) user.address.postCode = req.body.postCode;
+            if (req.body.addressLine1) user.address.addressLine1 = req.body.addressLine1;
+            if (req.body.addressLine2) user.address.addressLine2 = req.body.addressLine2;
+            if (req.body.city) user.address.city = req.body.city;
+            if (req.body.state) user.address.state = req.body.state;
+            if (req.body.country) user.address.country = req.body.country;
+            if (req.body.postCode) user.address.postCode = req.body.postCode;
 
             user.save();
 
@@ -149,44 +147,45 @@ router.route("/address")
         })
     });
 
-    router.get('/orders', checkJwt, (req, res, next) => {
-        Order.find({ owner: req.decoded.user._id })
-            .populate('products.product')
-            .populate('owner')
-            .exec((err, orders) => {
-                if(err){
-                    res.json({
-                        success: false,
-                        message: "Could not find your order"
-                    });
-                } else {
-                    res.json({
-                        success: false,
-                        message: 'Found your order',
-                        orders: orders
-                    });
-                }
-            });
-    });
+router.get('/orders', checkJwt, (req, res, next) => {
+    Order.find({ owner: req.decoded.user._id })
+        .populate('products.product')
+        .populate('owner')
+        .exec((err, orders) => {
+            if (err) {
+                res.json({
+                    success: false,
+                    message: "Could not find your order"
+                });
+            } else {
+                res.json({
+                    success: true,
+                    message: 'Found your order',
+                    orders: orders
+                });
+            }
+        });
+});
 
-    router.get('/orders/:id', checkJwt, (req, res, next) => {
-        Order.findOne({ _id: req.params.id })
-            .deepPopulate('products.product.owner')
-            .populate('owner')
-            .exec((err, order) => {
-                if(err){
-                    res.json({
-                        success: false,
-                        message: "Could not find your order"
-                    });
-                } else {
-                    res.json({
-                        success: false,
-                        message: 'Found your order',
-                        order: order
-                    });
-                }
-            });
-    });
+router.get('/orders/:id', checkJwt, (req, res, next) => {
+    Order.findOne({ _id: req.params.id })
+        .deepPopulate('products.product.owner')
+        .populate('owner')
+        .exec((err, order) => {
+            if (err) {
+                res.json({
+                    success: false,
+                    message: "Could not find your order"
+                });
+            } else {
+                res.json({
+                    success: false,
+                    message: 'Found your order',
+                    order: order
+                });
+            }
+        });
+});
+
 
 module.exports = router;

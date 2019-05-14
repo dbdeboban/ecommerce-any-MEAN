@@ -23,10 +23,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent
   },
-  {
-    path:'orders',
-    component:OrdersComponent
-  },
+  
   {
     path:'search',
     component: SearchComponent
@@ -70,6 +67,11 @@ const routes: Routes = [
   {
     path: 'profile/address',
     component: AddressComponent,
+    canActivate: [UserGuard]
+  },
+  {
+    path: 'profile/orders',
+    component: OrdersComponent,
     canActivate: [UserGuard]
   },
   {
